@@ -1,16 +1,21 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Configuration, OpenAIApi } = require('openai');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve frontend static files from /public
+app.use(express.static(path.join(__dirname, 'public')));
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
+// AI chat API endpoint
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
@@ -33,5 +38,5 @@ app.post('/chat', async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`Lil Scoom backend running on port ${PORT}`);
+  console.log(`Lil Scoom running on port ${PORT}`);
 });
