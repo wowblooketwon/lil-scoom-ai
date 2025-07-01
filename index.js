@@ -6,8 +6,6 @@ const { Configuration, OpenAIApi } = require('openai');
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Serve frontend static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
 const configuration = new Configuration({
@@ -15,7 +13,6 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-// AI chat API endpoint
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
@@ -28,10 +25,9 @@ app.post('/chat', async (req, res) => {
       ],
     });
 
-    const reply = response.data.choices[0].message.content;
-    res.json({ reply });
-  } catch (err) {
-    console.error(err);
+    res.json({ reply: response.data.choices[0].message.content });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Scoom broke 😢' });
   }
 });
